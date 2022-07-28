@@ -33,9 +33,10 @@ namespace HPACodingChallangeFramework
             Console.WriteLine("Expanding menu");
             fileExpandPattern.Expand();
             Thread.Sleep(1000);
-            Console.WriteLine("Selecting New option on menu");
+            Console.WriteLine("Finding window and getting pattern");  
             AutomationElement newOption = file.FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.NameProperty, "New"));
             InvokePattern newClickPattern = newOption.GetCurrentPattern(InvokePattern.Pattern) as InvokePattern;
+            Console.WriteLine("Selecting New option on menu");
             newClickPattern.Invoke();
             Thread.Sleep(1000);
             Console.WriteLine("Inserting text into notepad");
@@ -45,9 +46,10 @@ namespace HPACodingChallangeFramework
             Console.WriteLine("Expanding menu");
             fileExpandPattern.Expand();
             Thread.Sleep(1000);
-            Console.WriteLine("Selecting Save option on menu");
+            Console.WriteLine("Finding window and getting pattern");
             AutomationElement save = file.FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.NameProperty, "Save As..."));
             InvokePattern savePattern = save.GetCurrentPattern(InvokePattern.Pattern) as InvokePattern;
+            Console.WriteLine("Selecting Save option on menu");
             savePattern.Invoke();
             Thread.Sleep(1000);
             Console.WriteLine("Inserting text into Save dialog box");
@@ -58,11 +60,17 @@ namespace HPACodingChallangeFramework
             AutomationElement saveOption = rootElement.FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.AutomationIdProperty, "1"));
             InvokePattern saveAsWindowDialogClickPattern = saveOption.GetCurrentPattern(InvokePattern.Pattern) as InvokePattern;
             saveAsWindowDialogClickPattern.Invoke();
-            Thread.Sleep(1000);
-            Console.WriteLine("Clicking Save button");
-                AutomationElement confirmSaveAsOption = rootElement.FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.AutomationIdProperty, "CommandButton_6"));
-                InvokePattern confirmSaveAsWindowDialogClickPattern = confirmSaveAsOption.GetCurrentPattern(InvokePattern.Pattern) as InvokePattern;
-                confirmSaveAsWindowDialogClickPattern.Invoke();
+            Console.WriteLine("Checking to see if there is a Confirm Save As box");
+            AutomationElement isContentTextPresent = notePadWindow.FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.AutomationIdProperty, "CommandButton_6"));
+      
+                if(isContentTextPresent != null)
+                    {
+                       Console.WriteLine("Finding window and getting pattern");
+                       AutomationElement confirmSaveAsOption = notePadWindow.FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.AutomationIdProperty, "CommandButton_6"));
+                       InvokePattern confirmSaveAsWindowDialogClickPattern = confirmSaveAsOption.GetCurrentPattern(InvokePattern.Pattern) as InvokePattern;
+                       Console.WriteLine("Clicking Confirm Save As button");
+                       confirmSaveAsWindowDialogClickPattern.Invoke();
+                    }              
 
             }
             else
